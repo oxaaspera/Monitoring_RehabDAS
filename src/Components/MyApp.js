@@ -8,8 +8,10 @@ import kabupaten from '../Data/kabupaten.json';
 import AK from '../Data/areal_kerja.json';
 import april from '../Data/april.json';
 
+console.log(april);
+
 const aprilStyle = {
-    fillColor: "red",
+    fillColor: "green",
     fillOpacity:1,
     color:"black",
     weight: 1,
@@ -22,7 +24,43 @@ const AKStyle = {
 }
 
 const onEachApril = (april, layer) => {
-    const AprillName = april.properties.remarks;
+    const AprillName = `
+    <table>
+        <tr>
+            <th colspan="3">Detail</th>
+        </tr>
+        <tr>
+            <td>Blok</td>
+            <td>:</td>
+            <td>${april.properties.blok}</td>
+        </tr>
+        <tr>
+            <td>Kampung</td>
+            <td>:</td>
+            <td>${april.properties.kampung}</td>
+        </tr>
+        <tr>
+            <td>Luas</td>
+            <td>:</td>
+            <td>${april.properties.luas_ha} Ha</td>
+        </tr>
+        <tr>
+            <td>Periode</td>
+            <td>:</td>
+            <td>${april.properties.periode}</td>
+        </tr>
+        <tr>
+            <td>Petak</td>
+            <td>:</td>
+            <td>${april.properties.petak}</td>
+        </tr>
+        <tr>
+            <td>Remarks</td>
+            <td>:</td>
+            <td>${april.properties.remarks}</td>
+        </tr>
+    </table>
+    `;
     layer.bindPopup(AprillName);
 }
 
@@ -32,7 +70,7 @@ function MyMap (){
         <MapContainer className = "map"
         center={position}
         zoom={12}
-        style = {{height:800,weight:"100%"}}
+        style={{height:800,weight:"100%"}}
         >
             
                 <TileLayer
