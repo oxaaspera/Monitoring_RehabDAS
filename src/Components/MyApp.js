@@ -1,5 +1,6 @@
 import React from "react";
 import { MapContainer, TileLayer, LayersControl, GeoJSON } from "react-leaflet";
+import Legend from "./Legend";
 import kabupaten from "../Data/kabupaten.json";
 import AK from "../Data/areal_kerja.json";
 import april from "../Data/april.json";
@@ -107,6 +108,7 @@ function MyMap() {
           <GeoJSON data={kabupaten} />
         </LayersControl.Overlay>
       </LayersControl>
+      <Legend/>
     </MapContainer>
   );
 }
