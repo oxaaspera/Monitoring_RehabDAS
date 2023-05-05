@@ -1,30 +1,45 @@
 import React from "react";
-import {MapContainer, 
-    TileLayer,
-    LayersControl,
-    GeoJSON,
-} from "react-leaflet"
-import kabupaten from '../Data/kabupaten.json';
-import AK from '../Data/areal_kerja.json';
-import april from '../Data/april.json';
+import { MapContainer, TileLayer, LayersControl, GeoJSON } from "react-leaflet";
+import kabupaten from "../Data/kabupaten.json";
+import AK from "../Data/areal_kerja.json";
+import april from "../Data/april.json";
 
 console.log(april);
 
-const aprilStyle = {
-    fillColor: "green",
-    fillOpacity:1,
-    color:"black",
-    weight: 1,
+const aprilStyle = (april) => {
+    var remarks = april.properties.remarks
+    if (remarks == "sudah ditanami") {
+        return {
+            fillColor: "green",
+            fillOpacity: 1,
+            color: "black",
+            weight: 1,
+        }
+    } else if (remarks == "belum ditanami") {
+        return {
+            fillColor: "yellow",
+            fillOpacity: 1,
+            color: "black",
+            weight: 1,
+        }
+    } else {
+        return {
+            fillColor: "red",
+            fillOpacity: 1,
+            color: "black",
+            weight: 1,
+        }
+    }
 }
 
 const AKStyle = {
-    fillOpacity:0,
-    color:"black",
-    weight: 1,
-}
+  fillOpacity: 0,
+  color: "black",
+  weight: 1,
+};
 
 const onEachApril = (april, layer) => {
-    const AprillName = `
+  const AprillName = `
     <table>
         <tr>
             <th colspan="3">Detail</th>
@@ -61,36 +76,39 @@ const onEachApril = (april, layer) => {
         </tr>
     </table>
     `;
-    layer.bindPopup(AprillName);
-}
+  layer.bindPopup(AprillName);
+};
 
-function MyMap (){
-    const position = [-2.572042, 140.293851]
-    return(
-        <MapContainer className = "map"
-        center={position}
-        zoom={12}
-        style={{height:800,weight:"100%"}}
-        >
-            
-                <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                
-            <LayersControl position="topright">
-            <LayersControl.Overlay name="Update April">
-                    <GeoJSON  style={aprilStyle} onEachFeature={onEachApril} data = {april}/>
-                </LayersControl.Overlay>
-                <LayersControl.Overlay name="Areal Kerja">
-                    <GeoJSON style={AKStyle}  data = {AK}/>
-                </LayersControl.Overlay>
-                <LayersControl.Overlay name="Batas Administrasi">
-                    <GeoJSON data = {kabupaten}/>
-                </LayersControl.Overlay>    
-            </LayersControl>
-        </MapContainer>
-    )
+function MyMap() {
+  const position = [-2.572042, 140.293851];
+  return (
+    <MapContainer
+      className="map"
+      center={position}
+      zoom={12}
+      style={{ height: 800, weight: "100%" }}
+    >
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      <LayersControl position="topright">
+        <LayersControl.Overlay name="Update April">
+          <GeoJSON
+            style={aprilStyle}
+            onEachFeature={onEachApril}
+            data={april}
+          />
+        </LayersControl.Overlay>
+        <LayersControl.Overlay name="Areal Kerja">
+          <GeoJSON style={AKStyle} data={AK} />
+        </LayersControl.Overlay>
+        <LayersControl.Overlay name="Batas Administrasi">
+          <GeoJSON data={kabupaten} />
+        </LayersControl.Overlay>
+      </LayersControl>
+    </MapContainer>
+  );
 }
 
 export default MyMap;
