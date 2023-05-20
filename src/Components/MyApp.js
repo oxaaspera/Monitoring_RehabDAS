@@ -1,11 +1,13 @@
 import React from "react";
 import { MapContainer, TileLayer, LayersControl, GeoJSON } from "react-leaflet";
 import Legend from "./Legend";
-import kabupaten from "../Data/kabupaten.json";
 import AK from "../Data/areal_kerja.json";
 import april from "../Data/april.json";
+import mei from "../Data/mei.json";
+
 
 console.log(april);
+console.log(mei)
 
 const aprilStyle = (april) => {
     var remarks = april.properties.remarks
@@ -33,11 +35,39 @@ const aprilStyle = (april) => {
     }
 }
 
+const meiStyle = (mei) => {
+  var remarks = mei.properties.remarks
+  if (remarks == "sudah ditanami") {
+      return {
+          fillColor: "green",
+          fillOpacity: 1,
+          color: "black",
+          weight: 1,
+      }
+  } else if (remarks == "on progress") {
+      return {
+          fillColor: "yellow",
+          fillOpacity: 1,
+          color: "black",
+          weight: 1,
+      }
+  } else {
+      return {
+          fillColor: "red",
+          fillOpacity: 1,
+          color: "black",
+          weight: 1,
+      }
+  }
+}
+
+
 const AKStyle = {
   fillOpacity: 0,
   color: "red",
   weight: 1,
 };
+
 
 const onEachApril = (april, layer) => {
   const AprillName = `
@@ -80,6 +110,47 @@ const onEachApril = (april, layer) => {
   layer.bindPopup(AprillName);
 };
 
+const onEachMei = (mei, layer) => {
+  const MeiName = `
+    <table>
+        <tr>
+            <th colspan="3">Detail</th>
+        </tr>
+        <tr>
+            <td>Blok</td>
+            <td>:</td>
+            <td>${mei.properties.blok}</td>
+        </tr>
+        <tr>
+            <td>Kampung</td>
+            <td>:</td>
+            <td>${mei.properties.kampung}</td>
+        </tr>
+        <tr>
+            <td>Luas</td>
+            <td>:</td>
+            <td>${mei.properties.luas_ha} Ha</td>
+        </tr>
+        <tr>
+            <td>Periode</td>
+            <td>:</td>
+            <td>${mei.properties.periode}</td>
+        </tr>
+        <tr>
+            <td>Petak</td>
+            <td>:</td>
+            <td>${mei.properties.petak}</td>
+        </tr>
+        <tr>
+            <td>Remarks</td>
+            <td>:</td>
+            <td>${mei.properties.remarks}</td>
+        </tr>
+    </table>
+    `;
+  layer.bindPopup(MeiName);
+};
+
 function MyMap() {
   const position = [-2.572042, 140.293851];
   return (
@@ -94,6 +165,12 @@ function MyMap() {
         url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
       />
       <LayersControl position="topright">
+      <LayersControl.Overlay name="Update Mei">
+          <GeoJSON 
+            style={meiStyle} 
+            onEachFeature={onEachMei}
+            data={mei} />
+        </LayersControl.Overlay> 
         <LayersControl.Overlay name="Update April">
           <GeoJSON
             style={aprilStyle}
@@ -104,9 +181,7 @@ function MyMap() {
         <LayersControl.Overlay name="Areal Kerja">
           <GeoJSON style={AKStyle} data={AK} />
         </LayersControl.Overlay>
-        {/* <LayersControl.Overlay name="Batas Administrasi">
-          <GeoJSON data={kabupaten} />
-        </LayersControl.Overlay> */}
+            
       </LayersControl>
       <Legend/>
     </MapContainer>

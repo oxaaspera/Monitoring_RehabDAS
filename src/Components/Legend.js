@@ -5,7 +5,7 @@ const Legend = () => {
     return (
         <div className="legend">
             <div style={{ "--color": 'green' }}>Sudah ditanami</div>
-            <div style={{ "--color": 'yellow' }}>Belum ditanami</div>
+            <div style={{ "--color": 'yellow' }}>On Progress</div>
             <div style={{ "--color": 'red' }}>Tidak bisa ditanami</div>
         </div>
     );
